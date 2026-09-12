@@ -1,0 +1,2102 @@
+
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sarı Lokanta — Nişantaşı</title>
+<meta name="description" content="Nişantaşı'nın semt lokantası. Günlük değişen mutfağımız, rezervasyon ve QR ile kolay sipariş.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --bg:#f4f0e7;
+    --paper:#faf8f2;
+    --ink:#151513;
+    --muted:#777269;
+    --yellow:#d9a91f;
+    --yellow2:#efc84e;
+    --dark:#141412;
+    --line:rgba(21,21,19,.12);
+    --serif:"Playfair Display",Georgia,serif;
+    --sans:"DM Sans",Arial,sans-serif;
+    --max:1280px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    overflow-x:hidden;
+}
+
+body.lock{
+    overflow:hidden;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+button{
+    font:inherit;
+}
+
+.container{
+    width:min(var(--max),calc(100% - 56px));
+    margin:auto;
+}
+
+/* =========================
+   LOADER
+========================= */
+
+.loader{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    background:var(--dark);
+    color:white;
+    display:grid;
+    place-items:center;
+    transition:.8s ease;
+}
+
+.loader.done{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+}
+
+.loader-brand{
+    text-align:center;
+}
+
+.loader-brand span{
+    display:block;
+    font-family:var(--serif);
+    font-size:54px;
+    letter-spacing:-2px;
+}
+
+.loader-brand small{
+    display:block;
+    margin-top:12px;
+    color:#aaa69d;
+    letter-spacing:3px;
+    font-size:9px;
+    text-transform:uppercase;
+}
+
+.loader-bar{
+    width:120px;
+    height:2px;
+    background:var(--yellow);
+    margin:24px auto 0;
+    transform:scaleX(0);
+    transform-origin:left;
+    animation:load 1.2s ease forwards;
+}
+
+@keyframes load{
+    to{transform:scaleX(1)}
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    position:fixed;
+    z-index:1000;
+    top:0;
+    left:0;
+    width:100%;
+    padding:24px 0;
+    transition:.35s ease;
+}
+
+.header.scrolled{
+    padding:13px 0;
+    background:rgba(244,240,231,.88);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--line);
+}
+
+.nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    font-weight:700;
+    font-size:18px;
+    letter-spacing:-.5px;
+}
+
+.logo-mark{
+    width:39px;
+    height:39px;
+    border-radius:50%;
+    background:var(--yellow);
+    display:grid;
+    place-items:center;
+    font-family:var(--serif);
+    font-size:21px;
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:34px;
+    font-size:13px;
+}
+
+.nav-links a{
+    position:relative;
+    color:#45423c;
+}
+
+.nav-links a:after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-7px;
+    width:0;
+    height:1px;
+    background:var(--ink);
+    transition:.25s;
+}
+
+.nav-links a:hover:after{
+    width:100%;
+}
+
+.nav-cta{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.small-button{
+    min-height:44px;
+    padding:0 18px;
+    border-radius:100px;
+    background:var(--ink);
+    color:white;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:700;
+    transition:.25s;
+}
+
+.small-button:hover{
+    background:var(--yellow);
+    color:var(--ink);
+    transform:translateY(-2px);
+}
+
+.menu-btn{
+    display:none;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:transparent;
+    cursor:pointer;
+}
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+.mobile-menu{
+    position:fixed;
+    z-index:900;
+    top:76px;
+    left:16px;
+    right:16px;
+    padding:12px;
+    border-radius:20px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    box-shadow:0 25px 80px rgba(0,0,0,.15);
+    opacity:0;
+    transform:translateY(-15px);
+    pointer-events:none;
+    transition:.3s;
+}
+
+.mobile-menu.open{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+}
+
+.mobile-menu a{
+    display:block;
+    padding:16px;
+    border-radius:12px;
+}
+
+.mobile-menu a:hover{
+    background:var(--bg);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    min-height:100vh;
+    padding:150px 0 70px;
+    display:flex;
+    align-items:center;
+    position:relative;
+}
+
+.hero:before{
+    content:"";
+    position:absolute;
+    width:650px;
+    height:650px;
+    border-radius:50%;
+    background:var(--yellow);
+    opacity:.10;
+    right:-300px;
+    top:50px;
+    filter:blur(5px);
+}
+
+.hero-grid{
+    display:grid;
+    grid-template-columns:1fr .92fr;
+    align-items:center;
+    gap:90px;
+}
+
+.kicker{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    font-size:10px;
+    font-weight:700;
+    color:var(--yellow-dark);
+    margin-bottom:25px;
+}
+
+.kicker i{
+    display:block;
+    width:32px;
+    height:1px;
+    background:var(--yellow);
+}
+
+.hero h1{
+    font-family:var(--serif);
+    font-size:clamp(62px,8vw,112px);
+    line-height:.88;
+    letter-spacing:-5px;
+    font-weight:500;
+    max-width:800px;
+}
+
+.hero h1 em{
+    font-style:normal;
+    color:var(--yellow);
+}
+
+.hero-copy{
+    max-width:560px;
+    color:var(--muted);
+    font-size:16px;
+    line-height:1.85;
+    margin-top:31px;
+}
+
+.hero-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:11px;
+    margin-top:34px;
+}
+
+.button{
+    min-height:56px;
+    padding:0 24px;
+    border-radius:100px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    font-size:13px;
+    font-weight:700;
+    transition:.3s;
+}
+
+.button-black{
+    background:var(--ink);
+    color:white;
+}
+
+.button-black:hover{
+    transform:translateY(-3px);
+    box-shadow:0 18px 35px rgba(0,0,0,.14);
+}
+
+.button-light{
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.4);
+}
+
+.button-light:hover{
+    background:var(--yellow);
+    border-color:var(--yellow);
+}
+
+.hero-media{
+    position:relative;
+}
+
+.photo{
+    min-height:610px;
+    border-radius:30px;
+    position:relative;
+    overflow:hidden;
+    background:
+        linear-gradient(145deg,rgba(0,0,0,.02),rgba(0,0,0,.25)),
+        url("assets/sari-lokanta.jpg") center/cover,
+        #c49a29;
+    box-shadow:0 40px 90px rgba(0,0,0,.13);
+}
+
+/*
+  Fotoğraf yoksa sarı arka plan görünür.
+  Gerçek fotoğraf için:
+  assets/sari-lokanta.jpg
+*/
+
+.photo:after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        to top,
+        rgba(0,0,0,.42),
+        transparent 50%
+    );
+}
+
+.photo-caption{
+    position:absolute;
+    z-index:2;
+    left:24px;
+    right:24px;
+    bottom:24px;
+    padding:23px;
+    border-radius:20px;
+    background:rgba(250,248,242,.90);
+    backdrop-filter:blur(16px);
+}
+
+.photo-caption small{
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:1.7px;
+    text-transform:uppercase;
+}
+
+.photo-caption h3{
+    font-family:var(--serif);
+    font-size:28px;
+    font-weight:500;
+    line-height:1.1;
+    margin-top:8px;
+}
+
+.photo-caption p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:8px;
+}
+
+/* =========================
+   TICKER
+========================= */
+
+.ticker{
+    background:var(--ink);
+    color:white;
+    overflow:hidden;
+}
+
+.ticker-track{
+    width:max-content;
+    display:flex;
+    animation:move 25s linear infinite;
+}
+
+.ticker-item{
+    padding:19px 35px;
+    font-family:var(--serif);
+    font-size:18px;
+    display:flex;
+    gap:35px;
+    align-items:center;
+}
+
+.ticker-item b{
+    color:var(--yellow);
+}
+
+@keyframes move{
+    to{transform:translateX(-50%)}
+}
+
+/* =========================
+   COMMON
+========================= */
+
+section{
+    padding:135px 0;
+}
+
+.section-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    gap:50px;
+    margin-bottom:65px;
+}
+
+.label{
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    color:var(--yellow-dark);
+    font-weight:700;
+    margin-bottom:17px;
+}
+
+.title{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(45px,5vw,72px);
+    line-height:.98;
+    letter-spacing:-3px;
+}
+
+.description{
+    max-width:460px;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.85;
+}
+
+/* =========================
+   STORY
+========================= */
+
+.story{
+    background:var(--paper);
+}
+
+.story-grid{
+    display:grid;
+    grid-template-columns:.65fr 1.35fr;
+    gap:110px;
+    align-items:center;
+}
+
+.story-number{
+    font-family:var(--serif);
+    color:var(--yellow);
+    font-size:180px;
+    line-height:.8;
+}
+
+.story-content h2{
+    font-family:var(--serif);
+    font-size:clamp(42px,5vw,67px);
+    line-height:1;
+    letter-spacing:-2px;
+    max-width:750px;
+}
+
+.story-content p{
+    color:var(--muted);
+    max-width:700px;
+    font-size:15px;
+    line-height:1.9;
+    margin-top:24px;
+}
+
+.signature{
+    font-family:var(--serif);
+    font-size:25px;
+    margin-top:31px;
+}
+
+/* =========================
+   PHILOSOPHY
+========================= */
+
+.values{
+    background:var(--bg);
+}
+
+.values-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    border-top:1px solid var(--line);
+}
+
+.value{
+    min-height:320px;
+    padding:35px;
+    border-right:1px solid var(--line);
+    position:relative;
+}
+
+.value:last-child{
+    border-right:0;
+}
+
+.value-number{
+    color:var(--yellow-dark);
+    font-size:10px;
+    letter-spacing:1px;
+}
+
+.value h3{
+    font-family:var(--serif);
+    font-size:32px;
+    font-weight:500;
+    margin-top:95px;
+}
+
+.value p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.75;
+    max-width:300px;
+    margin-top:12px;
+}
+
+/* =========================
+   KITCHEN
+========================= */
+
+.kitchen{
+    background:var(--dark);
+    color:white;
+    position:relative;
+    overflow:hidden;
+}
+
+.kitchen:before{
+    content:"S";
+    position:absolute;
+    right:-100px;
+    top:-170px;
+    font-family:var(--serif);
+    font-size:700px;
+    line-height:1;
+    color:rgba(255,255,255,.025);
+}
+
+.kitchen-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:100px;
+    align-items:center;
+    position:relative;
+    z-index:1;
+}
+
+.kitchen .label{
+    color:var(--yellow);
+}
+
+.kitchen h2{
+    font-family:var(--serif);
+    font-size:clamp(48px,6vw,82px);
+    line-height:.94;
+    letter-spacing:-3px;
+    max-width:680px;
+}
+
+.kitchen-copy{
+    color:#aaa69e;
+    font-size:15px;
+    line-height:1.9;
+    max-width:580px;
+    margin-top:28px;
+}
+
+.kitchen-list{
+    border-top:1px solid rgba(255,255,255,.12);
+}
+
+.kitchen-row{
+    min-height:80px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid rgba(255,255,255,.12);
+}
+
+.kitchen-row strong{
+    font-family:var(--serif);
+    font-size:23px;
+    font-weight:400;
+}
+
+.kitchen-row span{
+    color:var(--yellow);
+    text-transform:uppercase;
+    letter-spacing:1.4px;
+    font-size:9px;
+}
+
+/* =========================
+   QR
+========================= */
+
+.order{
+    background:var(--yellow);
+}
+
+.order-grid{
+    display:grid;
+    grid-template-columns:1.3fr .7fr;
+    gap:80px;
+    align-items:center;
+}
+
+.order h2{
+    font-family:var(--serif);
+    font-size:clamp(50px,7vw,90px);
+    line-height:.9;
+    letter-spacing:-4px;
+    max-width:850px;
+}
+
+.order p{
+    max-width:590px;
+    color:rgba(0,0,0,.62);
+    line-height:1.8;
+    font-size:15px;
+    margin-top:25px;
+}
+
+.qr-card{
+    background:white;
+    padding:24px;
+    border-radius:28px;
+    box-shadow:0 30px 70px rgba(0,0,0,.13);
+    text-align:center;
+}
+
+.qr{
+    aspect-ratio:1;
+    position:relative;
+    background:white;
+    border:1px solid #ddd;
+    overflow:hidden;
+    display:grid;
+    place-items:center;
+}
+
+/* Dekoratif QR görünümü */
+.qr-pattern{
+    width:78%;
+    height:78%;
+    background:
+        linear-gradient(90deg,#111 10px,transparent 10px) 0 0/23px 23px,
+        linear-gradient(#111 10px,transparent 10px) 0 0/23px 23px;
+    opacity:.9;
+}
+
+.qr-corner{
+    position:absolute;
+    width:55px;
+    height:55px;
+    border:9px solid #111;
+}
+
+.qr-corner.one{
+    left:14px;
+    top:14px;
+}
+
+.qr-corner.two{
+    right:14px;
+    top:14px;
+}
+
+.qr-corner.three{
+    left:14px;
+    bottom:14px;
+}
+
+.qr-card strong{
+    display:block;
+    margin-top:18px;
+    font-size:13px;
+}
+
+.qr-card small{
+    color:var(--muted);
+    display:block;
+    margin-top:5px;
+    font-size:11px;
+}
+
+/* =========================
+   DELIVERY
+========================= */
+
+.delivery{
+    background:var(--paper);
+}
+
+.delivery-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:100px;
+    align-items:center;
+}
+
+.delivery h2{
+    font-family:var(--serif);
+    font-size:clamp(45px,5vw,72px);
+    line-height:.96;
+    letter-spacing:-3px;
+}
+
+.delivery p{
+    max-width:550px;
+    color:var(--muted);
+    font-size:15px;
+    line-height:1.85;
+    margin-top:25px;
+}
+
+.delivery-info{
+    background:var(--bg);
+    border-radius:28px;
+    padding:35px;
+}
+
+.info-row{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    padding:20px 0;
+    border-bottom:1px solid var(--line);
+}
+
+.info-row:last-child{
+    border:0;
+}
+
+.info-row span{
+    color:var(--muted);
+    font-size:12px;
+}
+
+.info-row strong{
+    font-size:13px;
+}
+
+/* =========================
+   RESERVATION
+========================= */
+
+.reservation{
+    padding-top:0;
+    background:var(--paper);
+}
+
+.reservation-box{
+    background:var(--dark);
+    color:white;
+    border-radius:32px;
+    text-align:center;
+    padding:90px 30px;
+    position:relative;
+    overflow:hidden;
+}
+
+.reservation-box:before,
+.reservation-box:after{
+    content:"";
+    position:absolute;
+    border:1px solid rgba(224,179,41,.23);
+    border-radius:50%;
+}
+
+.reservation-box:before{
+    width:390px;
+    height:390px;
+    left:-190px;
+    top:-190px;
+}
+
+.reservation-box:after{
+    width:330px;
+    height:330px;
+    right:-160px;
+    bottom:-180px;
+}
+
+.reservation-box .label{
+    color:var(--yellow);
+}
+
+.reservation-box h2{
+    font-family:var(--serif);
+    font-size:clamp(48px,6vw,82px);
+    line-height:.95;
+    letter-spacing:-3px;
+    max-width:850px;
+    margin:auto;
+    position:relative;
+    z-index:2;
+}
+
+.reservation-box p{
+    color:#aaa69e;
+    max-width:550px;
+    line-height:1.8;
+    font-size:14px;
+    margin:25px auto 30px;
+    position:relative;
+    z-index:2;
+}
+
+.reservation-actions{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+    position:relative;
+    z-index:2;
+}
+
+.button-yellow{
+    background:var(--yellow);
+    color:var(--ink);
+}
+
+.button-yellow:hover{
+    background:white;
+}
+
+.button-outline{
+    color:white;
+    border:1px solid rgba(255,255,255,.2);
+}
+
+.button-outline:hover{
+    border-color:white;
+}
+
+/* =========================
+   CONTACT
+========================= */
+
+.contact{
+    background:var(--paper);
+}
+
+.contact-grid{
+    display:grid;
+    grid-template-columns:.85fr 1.15fr;
+    gap:100px;
+    align-items:stretch;
+}
+
+.contact h2{
+    font-family:var(--serif);
+    font-size:clamp(45px,5vw,72px);
+    line-height:.95;
+    letter-spacing:-3px;
+}
+
+.details{
+    margin-top:40px;
+}
+
+.detail{
+    padding:19px 0;
+    border-bottom:1px solid var(--line);
+}
+
+.detail small{
+    display:block;
+    color:var(--yellow-dark);
+    text-transform:uppercase;
+    font-weight:700;
+    font-size:9px;
+    letter-spacing:1.5px;
+    margin-bottom:7px;
+}
+
+.detail span,
+.detail a{
+    font-size:14px;
+}
+
+.map{
+    min-height:480px;
+    border-radius:30px;
+    overflow:hidden;
+    background:#ddd7c9;
+    position:relative;
+    display:grid;
+    place-items:center;
+}
+
+.map-grid{
+    position:absolute;
+    inset:-100px;
+    opacity:.35;
+    background:
+        linear-gradient(25deg,transparent 47%,#aaa 48%,#aaa 49%,transparent 50%),
+        linear-gradient(155deg,transparent 47%,#aaa 48%,#aaa 49%,transparent 50%);
+    background-size:90px 90px;
+    transform:rotate(8deg);
+}
+
+.pin{
+    position:relative;
+    z-index:2;
+    width:82px;
+    height:82px;
+    border-radius:50%;
+    background:var(--yellow);
+    display:grid;
+    place-items:center;
+    font-size:25px;
+    box-shadow:0 20px 45px rgba(0,0,0,.18);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    background:var(--dark);
+    color:white;
+    padding:70px 0 28px;
+}
+
+.footer-top{
+    display:flex;
+    justify-content:space-between;
+    gap:60px;
+    padding-bottom:55px;
+    border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.footer-description{
+    color:#858179;
+    max-width:330px;
+    line-height:1.7;
+    font-size:12px;
+    margin-top:16px;
+}
+
+.footer-links{
+    display:flex;
+    gap:80px;
+}
+
+.footer-column strong{
+    display:block;
+    color:var(--yellow);
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    font-size:9px;
+    margin-bottom:18px;
+}
+
+.footer-column a{
+    display:block;
+    color:#aaa69e;
+    font-size:12px;
+    margin-bottom:12px;
+    transition:.2s;
+}
+
+.footer-column a:hover{
+    color:white;
+}
+
+.footer-bottom{
+    padding-top:24px;
+    display:flex;
+    justify-content:space-between;
+    color:#66635c;
+    font-size:10px;
+}
+
+/* =========================
+   FLOATING BAR
+========================= */
+
+.floating{
+    position:fixed;
+    z-index:800;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    align-items:center;
+    padding:5px;
+    border-radius:100px;
+    background:rgba(20,20,18,.94);
+    backdrop-filter:blur(15px);
+    box-shadow:0 20px 50px rgba(0,0,0,.2);
+}
+
+.floating a{
+    padding:12px 18px;
+    color:white;
+    font-size:11px;
+    font-weight:700;
+    border-radius:100px;
+}
+
+.floating a:first-child{
+    background:var(--yellow);
+    color:var(--ink);
+}
+
+/* =========================
+   REVEAL
+========================= */
+
+.reveal{
+    opacity:0;
+    transform:translateY(35px);
+    transition:
+        opacity .8s ease,
+        transform .8s cubic-bezier(.2,.7,.2,1);
+}
+
+.reveal.show{
+    opacity:1;
+    transform:none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:950px){
+
+    .container{
+        width:min(var(--max),calc(100% - 34px));
+    }
+
+    .nav-links,
+    .nav-cta{
+        display:none;
+    }
+
+    .menu-btn{
+        display:grid;
+        place-items:center;
+    }
+
+    .hero{
+        padding-top:125px;
+    }
+
+    .hero-grid,
+    .story-grid,
+    .kitchen-grid,
+    .order-grid,
+    .delivery-grid,
+    .contact-grid{
+        grid-template-columns:1fr;
+        gap:55px;
+    }
+
+    .hero h1{
+        font-size:clamp(57px,14vw,95px);
+    }
+
+    .photo{
+        min-height:480px;
+    }
+
+    .section-top{
+        display:block;
+    }
+
+    .section-top .description{
+        margin-top:25px;
+    }
+
+    .values-grid{
+        grid-template-columns:1fr;
+    }
+
+    .value{
+        min-height:250px;
+        border-right:0;
+        border-bottom:1px solid var(--line);
+    }
+
+    .value:last-child{
+        border-bottom:0;
+    }
+
+    .value h3{
+        margin-top:65px;
+    }
+
+    .order-grid{
+        text-align:left;
+    }
+
+    .qr-card{
+        max-width:310px;
+        margin:auto;
+    }
+
+    .floating{
+        width:calc(100% - 24px);
+        justify-content:center;
+    }
+
+    .floating a{
+        flex:1;
+        text-align:center;
+    }
+}
+
+@media(max-width:550px){
+
+    section{
+        padding:90px 0;
+    }
+
+    .hero{
+        min-height:auto;
+        padding-bottom:80px;
+    }
+
+    .hero-actions{
+        flex-direction:column;
+    }
+
+    .button{
+        width:100%;
+    }
+
+    .photo{
+        min-height:410px;
+        border-radius:22px;
+    }
+
+    .photo-caption{
+        left:14px;
+        right:14px;
+        bottom:14px;
+    }
+
+    .story-number{
+        font-size:120px;
+    }
+
+    .title{
+        letter-spacing:-2px;
+    }
+
+    .story-content h2,
+    .delivery h2{
+        letter-spacing:-2px;
+    }
+
+    .kitchen h2,
+    .order h2,
+    .reservation-box h2{
+        letter-spacing:-2px;
+    }
+
+    .reservation-box{
+        padding:65px 20px;
+        border-radius:24px;
+    }
+
+    .reservation-actions{
+        flex-direction:column;
+    }
+
+    .footer-top{
+        flex-direction:column;
+    }
+
+    .footer-links{
+        gap:40px;
+    }
+
+    .footer-bottom{
+        flex-direction:column;
+        gap:9px;
+    }
+
+    .map{
+        min-height:360px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOADER -->
+
+<div class="loader" id="loader">
+    <div class="loader-brand">
+        <span>Sarı</span>
+        <small>Nişantaşı · İstanbul</small>
+        <div class="loader-bar"></div>
+    </div>
+</div>
+
+
+<!-- HEADER -->
+
+<header class="header" id="header">
+
+    <div class="container nav">
+
+        <a href="#top" class="logo">
+            <span class="logo-mark">S</span>
+            <span>Sarı Lokanta</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="#hikaye">Hikâyemiz</a>
+            <a href="#mutfak">Mutfağımız</a>
+            <a href="#paket">Paket Servis</a>
+            <a href="#iletisim">İletişim</a>
+        </nav>
+
+        <div class="nav-cta">
+            <a class="small-button" href="#rezervasyon">
+                Rezervasyon
+            </a>
+        </div>
+
+        <button class="menu-btn" id="menuBtn">
+            ☰
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- MOBILE MENU -->
+
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#hikaye">Hikâyemiz</a>
+    <a href="#mutfak">Mutfağımız</a>
+    <a href="#paket">Paket Servis</a>
+    <a href="#iletisim">İletişim</a>
+    <a href="#rezervasyon">Rezervasyon Yap</a>
+</div>
+
+
+<main id="top">
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="container hero-grid">
+
+        <div class="reveal">
+
+            <div class="kicker">
+                <i></i>
+                Nişantaşı'nın semt lokantası
+            </div>
+
+            <h1>
+                Bugün ne
+                <em>pişiyor?</em>
+            </h1>
+
+            <p class="hero-copy">
+                Sarı Lokanta'da mutfak her gün yeniden kurulur.
+                İyi ürün, günlük hazırlık ve semt sıcaklığıyla
+                sofranıza gelen sade ama özenli yemekler.
+            </p>
+
+            <div class="hero-actions">
+
+                <a href="#rezervasyon" class="button button-black">
+                    Masa Ayırt
+                    <span>↗</span>
+                </a>
+
+                <a href="#siparis" class="button button-light">
+                    QR ile Sipariş
+                    <span>⌁</span>
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-media reveal">
+
+            <div class="photo">
+
+                <div class="photo-caption">
+
+                    <small>
+                        Sarı Lokanta
+                    </small>
+
+                    <h3>
+                        Günün mutfağından,
+                        sizin sofranıza.
+                    </h3>
+
+                    <p>
+                        Teşvikiye · Nişantaşı
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- TICKER -->
+
+<div class="ticker">
+
+    <div class="ticker-track">
+
+        <div class="ticker-item">
+            Günlük mutfak <b>✦</b>
+            Semt lokantası <b>✦</b>
+        </div>
+
+        <div class="ticker-item">
+            Nişantaşı <b>✦</b>
+            Paket servis <b>✦</b>
+        </div>
+
+        <div class="ticker-item">
+            Günlük mutfak <b>✦</b>
+            Semt lokantası <b>✦</b>
+        </div>
+
+        <div class="ticker-item">
+            Nişantaşı <b>✦</b>
+            Paket servis <b>✦</b>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- STORY -->
+
+<section class="story" id="hikaye">
+
+    <div class="container story-grid">
+
+        <div class="story-number reveal">
+            01
+        </div>
+
+        <div class="story-content reveal">
+
+            <div class="label">
+                Biz kimiz?
+            </div>
+
+            <h2>
+                Semt lokantası olmak
+                bizim için bir tarz değil,
+                bir alışkanlık.
+            </h2>
+
+            <p>
+                Sarı Lokanta, Nişantaşı'nın günlük hayatının
+                içinde yaşayan bir lokanta. Öğle arasında
+                uğrayan, akşam arkadaşlarıyla gelen,
+                zamanla bizi tanıyan misafirlerimiz için
+                iyi yemek kadar samimiyet de önemli.
+            </p>
+
+            <p>
+                Menümüzü fazla kalıba sokmuyoruz.
+                Çünkü mutfağın en güzel tarafının biraz
+                değişebilmek olduğuna inanıyoruz.
+            </p>
+
+            <div class="signature">
+                Sarı Lokanta
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- VALUES -->
+
+<section class="values">
+
+    <div class="container">
+
+        <div class="section-top reveal">
+
+            <div>
+                <div class="label">
+                    Mutfağın üç kuralı
+                </div>
+
+                <h2 class="title">
+                    Az laf.<br>
+                    İyi yemek.
+                </h2>
+            </div>
+
+            <p class="description">
+                Çok fazla ürün fotoğrafı yerine mutfağımızın
+                nasıl çalıştığını anlatmayı tercih ediyoruz.
+            </p>
+
+        </div>
+
+
+        <div class="values-grid">
+
+            <article class="value reveal">
+
+                <span class="value-number">01 / TAZE</span>
+
+                <h3>
+                    Günlük
+                </h3>
+
+                <p>
+                    Ürünlerimizi ve hazırlıklarımızı
+                    günün ihtiyacına göre şekillendiriyoruz.
+                </p>
+
+            </article>
+
+
+            <article class="value reveal">
+
+                <span class="value-number">02 / DEĞİŞKEN</span>
+
+                <h3>
+                    Her gün başka
+                </h3>
+
+                <p>
+                    Menü sık sık değişebilir.
+                    Çünkü iyi ürünü bekletmek yerine
+                    mutfakta değerlendirmeyi seviyoruz.
+                </p>
+
+            </article>
+
+
+            <article class="value reveal">
+
+                <span class="value-number">03 / SAMİMİ</span>
+
+                <h3>
+                    Semtten
+                </h3>
+
+                <p>
+                    Büyük laflar yerine tanıdık bir masa,
+                    sıcak bir karşılama ve iyi bir tabak.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- KITCHEN -->
+
+<section class="kitchen" id="mutfak">
+
+    <div class="container kitchen-grid">
+
+        <div class="reveal">
+
+            <div class="label">
+                Bugünün mutfağı
+            </div>
+
+            <h2>
+                Sabit bir menüden
+                daha fazlası.
+            </h2>
+
+            <p class="kitchen-copy">
+                Ürünlerimizi sık değiştirdiğimiz için
+                sofradaki deneyimi tek tek yemek
+                fotoğraflarına sıkıştırmıyoruz.
+                Mutfağın o günkü ritmi neyse,
+                Sarı'nın menüsü de ona göre şekilleniyor.
+            </p>
+
+        </div>
+
+
+        <div class="kitchen-list reveal">
+
+            <div class="kitchen-row">
+                <strong>Günün yemekleri</strong>
+                <span>Değişir</span>
+            </div>
+
+            <div class="kitchen-row">
+                <strong>Mevsim ürünleri</strong>
+                <span>Taze</span>
+            </div>
+
+            <div class="kitchen-row">
+                <strong>Özel hazırlıklar</strong>
+                <span>Günlük</span>
+            </div>
+
+            <div class="kitchen-row">
+                <strong>Tatlı & içecek</strong>
+                <span>Mutfağa göre</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- QR -->
+
+<section class="order" id="siparis">
+
+    <div class="container order-grid">
+
+        <div class="reveal">
+
+            <div class="label">
+                Masadan sipariş
+            </div>
+
+            <h2>
+                Menüyü aç.
+                Siparişini ver.
+            </h2>
+
+            <p>
+                Masanızdaki QR kodu telefonunuzla okutun.
+                Güncel menümüzü görüntüleyin ve
+                siparişinizi kolayca oluşturun.
+            </p>
+
+            <a href="#" class="button button-black"
+               style="margin-top:28px;"
+               onclick="order();return false;">
+                Sipariş Sistemini Aç ↗
+            </a>
+
+        </div>
+
+
+        <div class="qr-card reveal">
+
+            <div class="qr">
+
+                <div class="qr-pattern"></div>
+
+                <div class="qr-corner one"></div>
+                <div class="qr-corner two"></div>
+                <div class="qr-corner three"></div>
+
+            </div>
+
+            <strong>
+                Sarı Lokanta QR
+            </strong>
+
+            <small>
+                Kameranı aç · okut · sipariş ver
+            </small>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- DELIVERY -->
+
+<section class="delivery" id="paket">
+
+    <div class="container delivery-grid">
+
+        <div class="reveal">
+
+            <div class="label">
+                Paket servis
+            </div>
+
+            <h2>
+                Sarı,
+                evinize de gelir.
+            </h2>
+
+            <p>
+                Lokantaya gelemiyorsanız sorun değil.
+                Paket servis hizmetimizle Sarı'nın
+                mutfağını bulunduğunuz yere taşıyoruz.
+            </p>
+
+            <a href="#iletisim"
+               class="button button-black"
+               style="margin-top:28px;">
+                Sipariş Bilgisi ↗
+            </a>
+
+        </div>
+
+
+        <div class="delivery-info reveal">
+
+            <div class="info-row">
+                <span>Hizmet</span>
+                <strong>Paket servis</strong>
+            </div>
+
+            <div class="info-row">
+                <span>Bölge</span>
+                <strong>Nişantaşı ve çevresi</strong>
+            </div>
+
+            <div class="info-row">
+                <span>Sipariş</span>
+                <strong>Online / Telefon</strong>
+            </div>
+
+            <div class="info-row">
+                <span>Güncel bilgi</span>
+                <strong>Bize ulaşın</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- RESERVATION -->
+
+<section class="reservation" id="rezervasyon">
+
+    <div class="container">
+
+        <div class="reservation-box reveal">
+
+            <div class="label">
+                Rezervasyon
+            </div>
+
+            <h2>
+                Bu akşam
+                Sarı'da buluşalım.
+            </h2>
+
+            <p>
+                Masanızı önceden ayırtın.
+                Nişantaşı'nın içinde,
+                tanıdık bir sofrada görüşelim.
+            </p>
+
+            <div class="reservation-actions">
+
+                <a href="tel:+902120000000"
+                   class="button button-yellow">
+                    Rezervasyon Yap ↗
+                </a>
+
+                <a href="https://wa.me/902120000000"
+                   target="_blank"
+                   class="button button-outline">
+                    WhatsApp
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CONTACT -->
+
+<section class="contact" id="iletisim">
+
+    <div class="container contact-grid">
+
+        <div class="reveal">
+
+            <div class="label">
+                Bize uğra
+            </div>
+
+            <h2>
+                Nişantaşı'nda
+                görüşürüz.
+            </h2>
+
+            <div class="details">
+
+                <div class="detail">
+                    <small>Adres</small>
+                    <span>
+                        Teşvikiye / Nişantaşı, İstanbul
+                    </span>
+                </div>
+
+                <div class="detail">
+                    <small>Telefon</small>
+                    <a href="tel:+902120000000">
+                        +90 212 000 00 00
+                    </a>
+                </div>
+
+                <div class="detail">
+                    <small>Instagram</small>
+                    <a href="#" target="_blank">
+                        @sarilokanta
+                    </a>
+                </div>
+
+                <div class="detail">
+                    <small>Çalışma saatleri</small>
+                    <span>
+                        Her gün · 09:00 — 23:00
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <a
+            class="map reveal"
+            href="https://www.google.com/maps/search/?api=1&query=Nisantasi+Istanbul"
+            target="_blank"
+        >
+
+            <div class="map-grid"></div>
+
+            <div class="pin">
+                ↗
+            </div>
+
+        </a>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="container">
+
+        <div class="footer-top">
+
+            <div>
+
+                <a href="#top" class="logo">
+                    <span class="logo-mark">S</span>
+                    <span>Sarı Lokanta</span>
+                </a>
+
+                <p class="footer-description">
+                    Nişantaşı'nın günlük mutfağı.
+                    Semtin içinden, sofranın başına.
+                </p>
+
+            </div>
+
+
+            <div class="footer-links">
+
+                <div class="footer-column">
+
+                    <strong>Keşfet</strong>
+
+                    <a href="#hikaye">Hikâyemiz</a>
+                    <a href="#mutfak">Mutfağımız</a>
+                    <a href="#paket">Paket Servis</a>
+
+                </div>
+
+
+                <div class="footer-column">
+
+                    <strong>İletişim</strong>
+
+                    <a href="#rezervasyon">Rezervasyon</a>
+                    <a href="#iletisim">Konum</a>
+                    <a href="#">Instagram</a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <span>
+                © 2026 Sarı Lokanta
+            </span>
+
+            <span>
+                Nişantaşı · İstanbul
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- FLOATING CTA -->
+
+<div class="floating">
+
+    <a href="#rezervasyon">
+        Masa Ayırt
+    </a>
+
+    <a href="#siparis">
+        QR Sipariş
+    </a>
+
+</div>
+
+
+<script>
+
+/* =========================
+   LOADER
+========================= */
+
+window.addEventListener("load",()=>{
+
+    setTimeout(()=>{
+
+        document.getElementById("loader")
+            .classList.add("done");
+
+    },1100);
+
+});
+
+
+/* =========================
+   HEADER
+========================= */
+
+const header=document.getElementById("header");
+
+window.addEventListener("scroll",()=>{
+
+    if(window.scrollY>30){
+        header.classList.add("scrolled");
+    }else{
+        header.classList.remove("scrolled");
+    }
+
+});
+
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+const menuBtn=document.getElementById("menuBtn");
+const mobileMenu=document.getElementById("mobileMenu");
+
+menuBtn.addEventListener("click",()=>{
+
+    mobileMenu.classList.toggle("open");
+    document.body.classList.toggle("lock");
+
+    menuBtn.textContent =
+        mobileMenu.classList.contains("open")
+        ? "×"
+        : "☰";
+
+});
+
+document.querySelectorAll(".mobile-menu a").forEach(link=>{
+
+    link.addEventListener("click",()=>{
+
+        mobileMenu.classList.remove("open");
+        document.body.classList.remove("lock");
+        menuBtn.textContent="☰";
+
+    });
+
+});
+
+
+/* =========================
+   REVEAL ANIMATION
+========================= */
+
+const observer=new IntersectionObserver(
+    entries=>{
+
+        entries.forEach(entry=>{
+
+            if(entry.isIntersecting){
+
+                entry.target.classList.add("show");
+
+                observer.unobserve(entry.target);
+
+            }
+
+        });
+
+    },
+    {
+        threshold:.12
+    }
+);
+
+document.querySelectorAll(".reveal")
+    .forEach(el=>observer.observe(el));
+
+
+/* =========================
+   ORDER
+========================= */
+
+function order(){
+
+    /*
+      BURAYA GERÇEK QR SİPARİŞ
+      SİSTEMİNİN URL'SİNİ YAZ.
+
+      Örnek:
+
+      window.location.href =
+      "https://siparis-sisteminiz.com";
+    */
+
+    alert(
+        "Online sipariş bağlantısı burada açılacak."
+    );
+
+}
+
+
+/* =========================
+   ANCHOR FIX
+========================= */
+
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+
+    link.addEventListener("click",function(e){
+
+        const id=this.getAttribute("href");
+
+        if(id==="#" || id==="") return;
+
+        const target=document.querySelector(id);
+
+        if(!target) return;
+
+        e.preventDefault();
+
+        target.scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
